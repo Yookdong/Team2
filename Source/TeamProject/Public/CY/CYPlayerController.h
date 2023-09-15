@@ -17,7 +17,7 @@ class TEAMPROJECT_API ACYPlayerController : public APlayerController
 private:
 	//========= Component =====================
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-		class AInventoryComponent* InventoryComponent;
+	class UInventoryComponent* InventoryComponent;
 
 	//========= variable =====================
 	bool bIsThirdView;

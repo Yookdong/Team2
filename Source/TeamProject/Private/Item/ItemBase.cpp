@@ -65,3 +65,8 @@ void AItemBase::IsCanUseItem_Implementation(bool& outiscan)
 {
 	outiscan = IsValid(OwnerChar);
 }
+
+FText AItemBase::LookAt_Implementation()
+{
+	return FText();
+}

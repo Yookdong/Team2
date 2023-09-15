@@ -9,12 +9,14 @@
 
 UInventoryWidget::UInventoryWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	ATPPlayerController* jhcontroller = Cast<ATPPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if (jhcontroller != nullptr)
-	{
-		invencomponent = jhcontroller->GetComponentByClass<UInventorySystemComponent>();
+	UE_LOG(LogTemp, Display, TEXT("inven widget construct"));
 
-		UpdateInven();
+	ATPPlayerController* tpcontroller = Cast<ATPPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if(tpcontroller != nullptr)
+	{
+		invencomponent = tpcontroller->GetComponentByClass<UInventorySystemComponent>();
+
+		UpdateInven(); // 이게 생성자에 있어서 터지는 거 같음 pre construct 로 바꿔봐야 할 듯
 	}
 }
 

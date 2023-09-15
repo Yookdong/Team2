@@ -77,9 +77,6 @@ public:
 	virtual void EventEquip_Implementation(ACharacter* target) override;
 
 
-	/// <summary>
-	/// Use the Item
-	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = ItemEvent)
 	void EventTrigger();
 
@@ -96,4 +93,11 @@ public:
 	void IsCanUseItem(bool& iscan);
 
 	virtual void IsCanUseItem_Implementation(bool& outiscan) override;
+
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = ItemEvent)
+	FText LookAt();
+
+	virtual FText LookAt_Implementation() override;
+
 };
