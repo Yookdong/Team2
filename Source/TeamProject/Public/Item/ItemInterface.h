@@ -32,7 +32,7 @@ public:
 	void EventEquip(ACharacter* target);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = ItemEvent)
-	void InteractWith(APlayerController* pc);
+	void InteractWith(ATPPlayerController* pc);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = ItemEvent)
 	FText LookAt();

@@ -36,7 +36,7 @@ FName UTPGameInstance::SetCharacterRowName()
 	case ECHARTYPE::Green:
 		name = names[2];
 		break;
-	case ECHARTYPE::IT_Blue:
+	case ECHARTYPE::Blue:
 		name = names[3];
 		break;
 	default:

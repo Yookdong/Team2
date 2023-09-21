@@ -12,6 +12,8 @@ UItemInfoWidget::UItemInfoWidget(const FObjectInitializer& ObjectInitializer) : 
 
 void UItemInfoWidget::NativePreConstruct()
 {
+	Super::NativePreConstruct();
+
 	if (Message.IsEmpty())
 	{
 		this->SetVisibility(ESlateVisibility::Hidden);

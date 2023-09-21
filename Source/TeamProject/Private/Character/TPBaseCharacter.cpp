@@ -13,6 +13,8 @@
 #include "GameMode/TPGameInstance.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "PaperSpriteComponent.h"
+#include "GameMode/TPPlayerState.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ATPBaseCharacter::ATPBaseCharacter()
@@ -94,7 +96,13 @@ void ATPBaseCharacter::BeginPlay()
 		if (CharacterData != nullptr)
 			SetCharacter();
 	}
+}
 
+void ATPBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPBaseCharacter, EquipItem);
 }
 
 // Called every frame
@@ -102,6 +110,48 @@ void ATPBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATPBaseCharacter::BindPlayerState()
+{
+	ATPPlayerState* playerstate = Cast<ATPPlayerState>(GetPlayerState());
+
+	if (IsValid(playerstate))
+	{
+		playerstate->Fuc_Dele_UpdateHP.AddDynamic(this, &ATPBaseCharacter::EventUpdateHP);
+		EventUpdateHP(playerstate->CurrentHP, playerstate->MaxHP);
+
+		playerstate->Fuc_Dele_UpdateOX.AddDynamic(this, &ATPBaseCharacter::EventUpdateOX);
+		EventUpdateOX(playerstate->CurrentOX, playerstate->MaxOX);
+
+		return;
+	}
+
+	GetWorldTimerManager().SetTimer(TH_BindPlayerState, this, &ATPBaseCharacter::BindPlayerState, 0.1f, false);
+}
+
+void ATPBaseCharacter::Die()
+{
+}
+
+void ATPBaseCharacter::ChargeOX(float charge)
+{
+	ATPPlayerState* playerstate = Cast<ATPPlayerState>(GetPlayerState());
+
+	if (IsValid(playerstate))
+	{
+		playerstate->ChargeOX(charge);
+	}
+}
+
+void ATPBaseCharacter::AddDamage()
+{
+	ATPPlayerState* playerstate = Cast<ATPPlayerState>(GetPlayerState());
+
+	if (IsValid(playerstate))
+	{
+
+	}
 }
 
 void ATPBaseCharacter::SetThirdView()
@@ -152,6 +202,32 @@ void ATPBaseCharacter::SetCharacter()
 	FirstMesh->SetMaterial(0, CharacterData->ArmMaterial);
 }
 
+void ATPBaseCharacter::EventUpdateHP_Implementation(float curhp, float maxhp)
+{
+	if (curhp <= 0)
+	{
+		if (HasAuthority())
+		{
+			Die();
+		}
+	}
+}
+
+void ATPBaseCharacter::EventUpdateOX_Implementation(float curox, float maxox)
+{
+	if (curox <= 0)
+	{
+		if (HasAuthority())
+		{
+			GetWorldTimerManager().SetTimer(TH_OXZero, this, &ATPBaseCharacter::AddDamage, 3.0f, false);
+		}
+	}
+}
+
+void ATPBaseCharacter::OnRep_EquipItem()
+{
+}
+
 //================= Input ==============================
 void ATPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -177,15 +253,6 @@ void ATPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATPBaseCharacter::Look);
-
-		////Trigger
-		//EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Started, this, &ATPBaseCharacter::Trigger);
-
-		////PressF
-		//EnhancedInputComponent->BindAction(PressFAction, ETriggerEvent::Started, this, &ATPBaseCharacter::PressF);
-
-		////PressI
-		//EnhancedInputComponent->BindAction(PressIAction, ETriggerEvent::Started, this, &ATPBaseCharacter::PressI);
 
 		//ViewChange
 		EnhancedInputComponent->BindAction(ViewChangeAction, ETriggerEvent::Started, this, &ATPBaseCharacter::ViewChange);
@@ -221,18 +288,6 @@ void ATPBaseCharacter::Look(const FInputActionValue& value)
 		AddControllerPitchInput(lookAxisVector.Y);
 	}
 }
-
-//void ATPBaseCharacter::Trigger(const FInputActionValue& value)
-//{
-//}
-//
-//void ATPBaseCharacter::PressF(const FInputActionValue& value)
-//{
-//}
-//
-//void ATPBaseCharacter::PressI(const FInputActionValue& value)
-//{
-//}
 
 void ATPBaseCharacter::ViewChange(const FInputActionValue& value)
 {

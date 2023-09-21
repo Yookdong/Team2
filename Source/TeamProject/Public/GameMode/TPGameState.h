@@ -13,5 +13,10 @@ UCLASS()
 class TEAMPROJECT_API ATPGameState : public AGameState
 {
 	GENERATED_BODY()
-	
+	//Timer
+	//CurrentMission
+	//MaxMission
+	//HPProgressBar
+	//OXProgressBar
+	//CharIMG
 };

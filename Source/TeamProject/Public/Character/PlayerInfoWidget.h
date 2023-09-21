@@ -4,34 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "PlayHUDWidget.generated.h"
+#include "PlayerInfoWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TEAMPROJECT_API UPlayHUDWidget : public UUserWidget
+class TEAMPROJECT_API UPlayerInfoWidget : public UUserWidget
 {
 	GENERATED_BODY()
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	TObjectPtr<class UInventoryWidget> InvenWidget;
+	TObjectPtr<class UImage> CharIMG;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	TObjectPtr<class UPlayerInfoWidget> PlayerInfoWidget;
+	class UProgressBar* HPProgressBar;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	class UTextBlock* TimerText;
+	class UProgressBar* OXProgressBar;
 
 public:
-	UPlayHUDWidget(const FObjectInitializer& ObjectInitializer);
+	UPlayerInfoWidget(const FObjectInitializer& ObjectInitializer);
 
 	virtual void NativeConstruct() override;
 
-	void OpenInven();
-	void CloseInven();
-
-	void UpdateHP(float current, float max);
-	void UpdateOX(float current, float max);
-	void UpdateTimer(float time);
+	void SetHP(float current, float max);
+	void SetOX(float current, float max);
 };

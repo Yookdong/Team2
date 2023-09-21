@@ -16,7 +16,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* ItemBaseMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component, meta = (AllowPrivateAccess = "true"))
 	class UItemDataComponent* ItemDataComponent;
 
 	// 일반 변수
@@ -26,9 +26,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FST_Item ST_Item;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FST_Slot ST_Slot;
-
 public:	
 	// Sets default values for this actor's properties
 	AItemBase();
@@ -59,12 +56,6 @@ public:
 	// Server to Client
 
 	// Interface
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = ItemEvent)
-	void EventGetItem();
-
-	virtual void EventGetItem_Implementation() override;
-
-
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = ItemEvent)
 	void EventDrop();
 
@@ -100,4 +91,8 @@ public:
 
 	virtual FText LookAt_Implementation() override;
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = ItemEvent)
+	void InteractWith(ATPPlayerController* pc);
+
+	virtual void InteractWith_Implementation(ATPPlayerController* pc) override;
 };

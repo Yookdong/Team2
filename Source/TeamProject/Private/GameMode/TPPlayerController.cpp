@@ -6,10 +6,15 @@
 #include "EnhancedInputSubsystems.h"
 #include "Components/InputComponent.h"
 #include "TPBaseCharacter.h"
-#include "PlayHUDWidget.h"
+#include "InventoryComponent.h"
+#include "TPGameHUD.h"
+//#include "Net/UnrealNetwork.h"
+
 
 ATPPlayerController::ATPPlayerController()
 {
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InvenComponent"));
+
 	bIsThirdView = true;
 	bIsOpenInven = false;
 	ControlledPawn = nullptr;
@@ -42,6 +47,38 @@ void ATPPlayerController::OnPossess(APawn* aPawn)
 	}
 }
 
+bool ATPPlayerController::AddtoInven(FName name, int32 quantity)
+{
+	InventoryComponent->AddToInventory(name, quantity);
+	return false;
+}
+
+
+// Client to Server
+void ATPPlayerController::ReqTrigger_Implementation()
+{
+	ControlledPawn->GetEquipItem();
+	ResTrigger();
+}
+
+void ATPPlayerController::ReqPressF_Implementation()
+{
+	if (InventoryComponent->GetLookatActor() != nullptr)
+	{
+		InventoryComponent->ReqInteract();
+	}
+}
+
+
+// Server to Client
+void ATPPlayerController::ResTrigger_Implementation()
+{
+}
+
+void ATPPlayerController::ResPressF_Implementation()
+{
+}
+
 
 // Input Function
 void ATPPlayerController::SetupInactiveStateInputComponent(UInputComponent* InComponent)
@@ -71,23 +108,28 @@ void ATPPlayerController::SetupInactiveStateInputComponent(UInputComponent* InCo
 void ATPPlayerController::Trigger(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Display, TEXT("Trigger"));
+	ReqTrigger();
 }
 
 void ATPPlayerController::PressF(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Display, TEXT("PressF"));
+	ReqPressF();
 }
 
 void ATPPlayerController::PressI(const FInputActionValue& value)
 {
+	ATPGameHUD* hud = Cast<ATPGameHUD>(GetHUD());
+	if (hud == nullptr) return;
+
 	if (bIsOpenInven)
 	{
-		PlayHUDWidget->CloseInven();
 		bIsOpenInven = !bIsOpenInven;
+		hud->OpenInven();
 	}
 	else
 	{
-		PlayHUDWidget->OpenInven();
 		bIsOpenInven = !bIsOpenInven;
+		hud->CloseInven();
 	}
 }

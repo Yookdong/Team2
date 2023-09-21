@@ -2,6 +2,7 @@
 
 
 #include "Item/ItemDataComponent.h"
+#include "GameMode//TPPlayerController.h"
 
 // Sets default values for this component's properties
 UItemDataComponent::UItemDataComponent()
@@ -10,7 +11,7 @@ UItemDataComponent::UItemDataComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	Quantity = 1;
 }
 
 
@@ -19,12 +20,7 @@ void UItemDataComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* Owner = GetOwner();
-	if (Owner)
-	{
-		Owner->SetReplicates(true);
-	}
-	
+	GetOwner()->SetReplicates(true);
 }
 
 
@@ -36,8 +32,16 @@ void UItemDataComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	
 }
 
-void UItemDataComponent::InteractWith_Implementation(APlayerController* playercontroller)
+void UItemDataComponent::InteractWith_Implementation(ATPPlayerController* playercontroller)
 {
-
+	if (IsValid(playercontroller))
+	{
+		bool result = playercontroller->AddtoInven(ItemID.RowName, Quantity);
+		
+		if (result)
+		{
+			GetOwner()->Destroy();
+		}
+	}
 }
 

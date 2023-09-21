@@ -4,28 +4,25 @@
 #include "Item/InventoryWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPlayerController.h"
-#include "InventorySystemComponent.h"
+#include "InventoryComponent.h"
 #include "Components/WrapBox.h"
 
-UInventoryWidget::UInventoryWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+
+void UInventoryWidget::NativePreConstruct()
 {
 	UE_LOG(LogTemp, Display, TEXT("inven widget construct"));
 
 	ATPPlayerController* tpcontroller = Cast<ATPPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if(tpcontroller != nullptr)
+	if (tpcontroller != nullptr)
 	{
-		invencomponent = tpcontroller->GetComponentByClass<UInventorySystemComponent>();
+		invencomponent = tpcontroller->GetComponentByClass<UInventoryComponent>();
 
-		UpdateInven(); // 이게 생성자에 있어서 터지는 거 같음 pre construct 로 바꿔봐야 할 듯
-	}
-}
+		OnUpdateInven(); // 이게 생성자에 있어서 터지는 거 같음 pre construct 로 바꿔봐야 할 듯
 
-void UInventoryWidget::UpdateInven()
-{
-	InvenGrid->ClearChildren();
-
-	if (invencomponent != nullptr)
-	{
+		if (invencomponent != nullptr)
+		{
+			invencomponent->FUpdateInvenDele.BindUFunction(this, FName("OnUpdateInven"));
+		}
 	}
 }
 
@@ -37,4 +34,15 @@ void UInventoryWidget::OpenInven()
 void UInventoryWidget::CloseInven()
 {
 	// 이것도 생성인되어 있는디
+}
+
+
+// Server to Client
+void UInventoryWidget::OnUpdateInven()
+{
+	InvenGrid->ClearChildren();
+
+	if (invencomponent != nullptr)
+	{
+	}
 }

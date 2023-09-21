@@ -17,12 +17,14 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	TObjectPtr<class UWrapBox> InvenGrid;
 
-	class UInventorySystemComponent* invencomponent;
+	class UInventoryComponent* invencomponent;
 
 public:
-	UInventoryWidget(const FObjectInitializer& ObjectInitializer);
+	virtual void NativePreConstruct() override;
 
-	void UpdateInven();
 	void OpenInven();
 	void CloseInven();
+
+	UFUNCTION()
+	void OnUpdateInven();
 };

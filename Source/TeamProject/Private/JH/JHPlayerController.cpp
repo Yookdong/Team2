@@ -5,13 +5,13 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "JH/JHBaseCharacter.h"
-#include "InventorySystemComponent.h"
+#include "InventoryComponent.h"
 #include "TPGameHUD.h"
 
 AJHPlayerController::AJHPlayerController()
 {
 	// create
-	InventoryComponent = CreateDefaultSubobject<UInventorySystemComponent>(TEXT("Inventory"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
 	// ETC Setting
 	bIsThirdView = true;

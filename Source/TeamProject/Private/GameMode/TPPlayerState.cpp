@@ -7,6 +7,10 @@
 
 ATPPlayerState::ATPPlayerState()
 {
+	MaxHP = 100;
+	CurrentHP = MaxHP;
+	MaxOX = 100;
+	CurrentOX = MaxOX;
 }
 
 void ATPPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -15,25 +19,8 @@ void ATPPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ATPPlayerState, CurrentHP);
 	DOREPLIFETIME(ATPPlayerState, MaxHP);
-}
-
-void ATPPlayerState::UpdateBind()
-{
-	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
-
-	if (player0 != nullptr)
-	{
-		ATPGameHUD* TPHUD = Cast<ATPGameHUD>(player0->GetHUD());
-
-		if (TPHUD != nullptr)
-		{
-			TPHUD->BindPlayerState(this);
-			return;
-		}
-	}
-
-	FTimerManager& timermanager = GetWorldTimerManager();
-	timermanager.SetTimer(TH_UpdateBind, this, &ATPPlayerState::UpdateBind, 0.1f, false);
+	DOREPLIFETIME(ATPPlayerState, CurrentOX);
+	DOREPLIFETIME(ATPPlayerState, MaxOX);
 }
 
 void ATPPlayerState::AddDamage(float damage)
@@ -52,6 +39,22 @@ void ATPPlayerState::Heal(float heal)
 	OnRep_CurrentHP();
 }
 
+void ATPPlayerState::UseOX(float ox)
+{
+	CurrentOX -= ox;
+	CurrentOX = FMath::Clamp(CurrentOX, 0, MaxOX);
+
+	OnRep_CurrentOX();
+}
+
+void ATPPlayerState::ChargeOX(float ox)
+{
+	CurrentOX += ox;
+	CurrentOX = FMath::Clamp(CurrentOX, 0.0f, MaxOX);
+
+	OnRep_CurrentOX();
+}
+
 void ATPPlayerState::SetUserName(const FString& name)
 {
 	UserName = name;
@@ -66,6 +69,16 @@ void ATPPlayerState::OnRep_CurrentHP()
 }
 
 void ATPPlayerState::OnRep_MaxHP()
+{
+}
+
+void ATPPlayerState::OnRep_CurrentOX()
+{
+	if (Fuc_Dele_UpdateOX.IsBound())
+		Fuc_Dele_UpdateOX.Broadcast(CurrentOX, MaxOX);
+}
+
+void ATPPlayerState::OnRep_MaxOX()
 {
 }
 

@@ -4,34 +4,40 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "PlayHUDWidget.generated.h"
+#include "LobbyHUDWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TEAMPROJECT_API UPlayHUDWidget : public UUserWidget
+class TEAMPROJECT_API ULobbyHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	TObjectPtr<class UInventoryWidget> InvenWidget;
+	class UButton* StartButton;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	TObjectPtr<class UPlayerInfoWidget> PlayerInfoWidget;
+	class UButton* SelectButton;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	class UTextBlock* TimerText;
+	class UButton* CancelButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	class UHorizontalBox* SelectBox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool bIsSelectButton;
 
 public:
-	UPlayHUDWidget(const FObjectInitializer& ObjectInitializer);
-
 	virtual void NativeConstruct() override;
 
-	void OpenInven();
-	void CloseInven();
+	UFUNCTION()
+	void StartGame();
 
-	void UpdateHP(float current, float max);
-	void UpdateOX(float current, float max);
-	void UpdateTimer(float time);
+	UFUNCTION()
+	void CharacterSelect();
+
+	UFUNCTION()
+	void SelectCancel();
 };

@@ -6,7 +6,8 @@
 #include "GameFramework/PlayerState.h"
 #include "TPPlayerState.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateHP_TwoParams, float, CurrentHP, float, MaxHP);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateHP, float, CurrentHP, float, MaxHP);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateOX, float, CurrentOX, float, MaxOX);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateUserName, const FString&, UserName);
 
 /**
@@ -21,19 +22,26 @@ private:
 public:
 	ATPPlayerState();
 
-	void UpdateBind();
-
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentHP)
 	float CurrentHP;
 
 	UPROPERTY(ReplicatedUsing = OnRep_MaxHP)
 	float MaxHP;
 
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentOX)
+	float CurrentOX;
+
+	UPROPERTY(ReplicatedUsing = OnRep_MaxOX)
+	float MaxOX;
+
 	UPROPERTY(ReplicatedUsing = OnRep_UserName)
 	FString UserName;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-	FDele_UpdateHP_TwoParams Fuc_Dele_UpdateHP;
+	FDele_UpdateHP Fuc_Dele_UpdateHP;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	FDele_UpdateOX Fuc_Dele_UpdateOX;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 	FDele_UpdateUserName Func_Dele_UpdateUserName;
@@ -44,6 +52,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Heal(float heal);
+
+	UFUNCTION(BlueprintCallable)
+	void UseOX(float ox);
+
+	UFUNCTION(BlueprintCallable)
+	void ChargeOX(float ox);
 
 	UFUNCTION(BlueprintCallable)
 	FString GetUserName() { return UserName; }
@@ -58,6 +72,12 @@ public:
 
 	UFUNCTION()
 	void OnRep_MaxHP();
+
+	UFUNCTION()
+	void OnRep_CurrentOX();
+
+	UFUNCTION()
+	void OnRep_MaxOX();
 
 	UFUNCTION()
 	void OnRep_UserName();

@@ -36,6 +36,13 @@ private:
 	//-------- variable --------
 	FST_Character* CharacterData;
 
+	// Notify 변수
+	UPROPERTY(ReplicatedUsing = OnRep_EquipItem)
+	AActor* EquipItem;
+
+	// Timer Handle
+	FTimerHandle TH_BindPlayerState;
+	FTimerHandle TH_OXZero;
 
 public:
 	// Sets default values for this character's properties
@@ -49,9 +56,44 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void BindPlayerState();
+	void Die();
+	void ChargeOX(float charge);
+	void AddDamage();
+
+	// Getter
+	AActor* GetEquipItem() { return EquipItem; }
+
+	UFUNCTION(BlueprintPure)
+	bool IsEquip() { return IsValid(EquipItem); }
+
+
+	// Setter
 	void SetThirdView();
 	void SetFirstView();
 	void SetCharacter();
+
+
+	// 연결
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void EventUpdateHP(float curhp, float maxhp);
+
+	virtual void EventUpdateHP_Implementation(float curhp, float maxhp);
+
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void EventUpdateOX(float curox, float maxox);
+
+	virtual void EventUpdateOX_Implementation(float curox, float maxox);
+
+
+	// Client to Server
+
+
+	// Server to Client
+	UFUNCTION()
+	void OnRep_EquipItem();
+
 
 
 //======== Input ============
@@ -68,18 +110,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
-	///** Trigger Input Action */
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	//class UInputAction* TriggerAction;
-
-	///** PressF Input Action */
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	//class UInputAction* PressFAction;
-
-	///** PressI Input Action */
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	//class UInputAction* PressIAction;
-
 	/** PressI Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ViewChangeAction;
@@ -93,15 +123,6 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& value);
-
-	///** Called for Shooting input */
-	//void Trigger(const FInputActionValue& value);
-
-	///** Called for PressF input */
-	//void PressF(const FInputActionValue& value);
-
-	///** Called for PressI input */
-	//void PressI(const FInputActionValue& value);
 
 	/** Called for ViewChange input */
 	void ViewChange(const FInputActionValue& value);

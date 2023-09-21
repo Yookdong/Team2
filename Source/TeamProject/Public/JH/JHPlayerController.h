@@ -17,7 +17,7 @@ class TEAMPROJECT_API AJHPlayerController : public APlayerController
 private:
 	//========= Component =====================
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	class UInventorySystemComponent* InventoryComponent;
+	class UInventoryComponent* InventoryComponent;
 
 	//========= variable =====================
 	bool bIsThirdView;
@@ -39,7 +39,7 @@ public:
 	// Getter
 	bool IsOpenInven() { return bIsOpenInven; }
 	bool bGetThirdView() { return bIsThirdView; }
-	class UInventorySystemComponent* GetInvenComponent() { return InventoryComponent; }
+	class UInventoryComponent* GetInvenComponent() { return InventoryComponent; }
 
 	// Setter
 	void SetOpenInven(bool value) { bIsOpenInven = value; }

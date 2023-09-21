@@ -15,11 +15,16 @@ void UTPCharSelectUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	UEnum* CharStateEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("ECHARTYPE"), true);
-	if (CharStateEnum)
-		CharType = CharStateEnum->GetNameStringByValue((int64)SelectType);
+/*
+Before: const UEnum* enumObject = FindObject(ANY_PACKAGE, TEXT(¡°ECustomEnum¡±));
+After: const UEnum* enumObject = FindObject(nullptr, TEXT(¡°/Script/TPSGame.ECustomEnum¡±));
+*/
 
-	CharTypeBox->Text = FText::FromString(CharType);
+	const UEnum* charStateEnum = FindObject<UEnum>(nullptr, TEXT("/Script/TeamProject.ECHARTYPE"), true);
+	if (charStateEnum)
+		CharType = charStateEnum->GetNameStringByValue((int64)SelectType);
+
+	CharTypeBox->SetText(FText::FromString(CharType));
 }
 
 void UTPCharSelectUserWidget::UpdateType()

@@ -23,7 +23,6 @@ private:
 	bool bIsThirdView;
 	bool bIsOpenInven;
 	class ATPBaseCharacter* ControlledPawn;
-	class UPlayHUDWidget* PlayHUDWidget;
 
 public:
 	ATPPlayerController();
@@ -34,14 +33,30 @@ protected:
 	virtual void OnPossess(APawn* aPawn) override;
 
 public:
+	bool AddtoInven(FName name, int32 quantity);
+
 	// Getter
 	bool bGetThirdView() { return bIsThirdView; }
 
 	// Setter
 	void bSetThirdView(bool value) { bIsThirdView = value; }
-	void SetPlayHUDWidget(UPlayHUDWidget* value) { PlayHUDWidget = value; }
+
+	// Client to Server
+	UFUNCTION(Server, Reliable)
+	void ReqTrigger();
+
+	UFUNCTION(Server, Reliable)
+	void ReqPressF();
+
+	// Server to Client
+	UFUNCTION(NetMulticast, Reliable)
+	void ResTrigger();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ResPressF();
 
 
+public:
 	//========= Input =====================
 	/** Sets up input bindings for the input component pushed on the stack in the inactive state. */
 	virtual void SetupInactiveStateInputComponent(UInputComponent* InComponent) override;
@@ -64,9 +79,6 @@ private:
 		class UInputAction* PressIAction;
 
 protected:
-	///** Sets up input bindings for the input component pushed on the stack in the inactive state. */
-	//virtual void SetupInactiveStateInputComponent(UInputComponent* InComponent) override;
-
 	/** Called for Shooting input */
 	void Trigger(const FInputActionValue& value);
 

@@ -6,7 +6,9 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "PlayHUDWidget.h"
 #include "TPPlayerState.h"
-#include "TPPlayerController.h"
+#include "Kismet/GameplayStatics.h"
+#include "TPGameModeBase.h"
+
 
 void ATPGameHUD::BeginPlay()
 {
@@ -21,21 +23,38 @@ void ATPGameHUD::BeginPlay()
 	if (IsValid(player0))
 	{
 		player0->SetInputMode(FInputModeGameOnly());
-
-		ATPPlayerController* ps = Cast<ATPPlayerController>(player0);
-
-		if (ps != nullptr)
-			ps->SetPlayHUDWidget(PlayHUDWidget);
 	}
 }
 
-void ATPGameHUD::BindPlayerState(ATPPlayerState* tpstate)
+void ATPGameHUD::BindPlayerState()
 {
-	if (IsValid(tpstate))
+	APlayerController* controller = GetWorld()->GetFirstPlayerController();
+
+	if (IsValid(controller))
 	{
-		tpstate->Fuc_Dele_UpdateHP.AddDynamic(this, &ATPGameHUD::OnUpdateMyHP);
-		OnUpdateMyHP(tpstate->CurrentHP,tpstate->MaxHP);
+		ATPPlayerState* tpstate = Cast<ATPPlayerState>(controller->PlayerState);
+
+		if (IsValid(tpstate))
+		{
+			tpstate->Fuc_Dele_UpdateHP.AddDynamic(this, &ATPGameHUD::OnUpdateMyHP);
+			OnUpdateMyHP(tpstate->CurrentHP, tpstate->MaxHP);
+
+			tpstate->Fuc_Dele_UpdateOX.AddDynamic(this, &ATPGameHUD::OnUpdateMyOX);
+			OnUpdateMyOX(tpstate->CurrentOX, tpstate->MaxOX);
+		}
 	}
+
+	ATPGameModeBase* gamemode = Cast<ATPGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	
+	if (IsValid(gamemode))
+	{
+		gamemode->Fuc_Dele_UpdateTimer.AddDynamic(this, &ATPGameHUD::OnUpdateGameTime);
+		OnUpdateGameTime(gamemode->Timer);
+		
+		return;
+	}
+
+	GetWorldTimerManager().SetTimer(TH_BindPlayerState, this, &ATPGameHUD::BindPlayerState, 0.1f, false);
 }
 
 void ATPGameHUD::OpenInven()
@@ -60,4 +79,15 @@ void ATPGameHUD::CloseInven()
 
 void ATPGameHUD::OnUpdateMyHP_Implementation(float curhp, float maxhp)
 {
+	PlayHUDWidget->UpdateHP(curhp, maxhp);
+}
+
+void ATPGameHUD::OnUpdateMyOX_Implementation(float curox, float maxox)
+{
+	PlayHUDWidget->UpdateOX(curox, maxox);
+}
+
+void ATPGameHUD::OnUpdateGameTime_Implementation(float timer)
+{
+	PlayHUDWidget->UpdateTimer(timer);
 }

@@ -13,6 +13,7 @@ AItemBase::AItemBase()
 
 	// create
 	ItemBaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	ItemDataComponent = CreateDefaultSubobject<UItemDataComponent>(TEXT("ItemDataComp"));
 
 	// Inherit
 	SetRootComponent(ItemBaseMesh);
@@ -33,10 +34,6 @@ void AItemBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void AItemBase::EventGetItem_Implementation()
-{
 }
 
 void AItemBase::EventDrop_Implementation()
@@ -69,4 +66,8 @@ void AItemBase::IsCanUseItem_Implementation(bool& outiscan)
 FText AItemBase::LookAt_Implementation()
 {
 	return FText();
+}
+
+void AItemBase::InteractWith_Implementation(ATPPlayerController* pc)
+{
 }
