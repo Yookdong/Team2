@@ -7,10 +7,19 @@
 
 ATPPlayerState::ATPPlayerState()
 {
-	MaxHP = 100;
+	PrimaryActorTick.bCanEverTick = true;
+
+	MaxHP = 10;
 	CurrentHP = MaxHP;
-	MaxOX = 100;
+	MaxOX = 10;
 	CurrentOX = MaxOX;
+}
+
+void ATPPlayerState::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	UseOX(DeltaSeconds);
 }
 
 void ATPPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

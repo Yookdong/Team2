@@ -5,6 +5,8 @@
 #include "InventoryWidget.h"
 #include "Character/PlayerInfoWidget.h"
 #include "Components/TextBlock.h"
+#include "GameOverWidget.h"
+#include "GameClearWidget.h"
 
 
 UPlayHUDWidget::UPlayHUDWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -16,6 +18,8 @@ void UPlayHUDWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	InvenWidget->SetVisibility(ESlateVisibility::Collapsed);
+	GameClearWidget->SetVisibility(ESlateVisibility::Collapsed);
+	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UPlayHUDWidget::OpenInven()
@@ -43,6 +47,30 @@ void UPlayHUDWidget::CloseInven()
 	}
 }
 
+void UPlayHUDWidget::OpenGameClear()
+{
+	GameClearWidget->SetVisibility(ESlateVisibility::Visible);
+
+	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
+	if (IsValid(player0))
+	{
+		player0->SetInputMode(FInputModeUIOnly());
+		player0->bShowMouseCursor = true;
+	}
+}
+
+void UPlayHUDWidget::OpenGameOver()
+{
+	GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+
+	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
+	if (IsValid(player0))
+	{
+		player0->SetInputMode(FInputModeUIOnly());
+		player0->bShowMouseCursor = true;
+	}
+}
+
 void UPlayHUDWidget::UpdateHP(float current, float max)
 {
 	PlayerInfoWidget->SetHP(current, max);
@@ -61,5 +89,6 @@ void UPlayHUDWidget::UpdateTimer(float time)
 	minute = time / 60.0f;
 	second = (int)(time) % 60;
 
-	//FText::FromString(FText("mintue"))
+	FString timer = FString::Printf(TEXT("%d : %d"), minute, second);
+	TimerText->SetText(FText::FromString(timer));
 }

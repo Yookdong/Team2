@@ -15,7 +15,8 @@ enum class EGAMESTATE : uint8
 	Lobby UMETA(DisplayName = "Lobby"),
 	GameStart UMETA(DisplayName = "GameStart"),
 	GamePlay UMETA(DisplayName = "GamePlay"),
-	GameEnd UMETA(DisplayName = "GameEnd"),
+	GameClear UMETA(DisplayName = "GameClear"),
+	GameOver UMETA(DisplayName = "GameOver"),
 	Loading UMETA(DisplayName = "Loading"),
 };
 

@@ -22,8 +22,10 @@ void ATPGameHUD::BeginPlay()
 	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
 	if (IsValid(player0))
 	{
-		player0->SetInputMode(FInputModeGameOnly());
+		player0->SetInputMode(FInputModeUIOnly());
 	}
+
+	BindPlayerState();
 }
 
 void ATPGameHUD::BindPlayerState()

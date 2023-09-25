@@ -52,14 +52,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void BindPlayerState();
-	void Die();
-	void ChargeOX(float charge);
-	void AddDamage();
+	void ChargeOX(float value);
+	void MinusHP();
+	void Heal(float value);
 
 	// Getter
 	AActor* GetEquipItem() { return EquipItem; }
@@ -88,12 +90,16 @@ public:
 
 
 	// Client to Server
+	UFUNCTION(Server, Reliable)
+	void ReqDie();
 
 
 	// Server to Client
 	UFUNCTION()
 	void OnRep_EquipItem();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void ResDie();
 
 
 //======== Input ============

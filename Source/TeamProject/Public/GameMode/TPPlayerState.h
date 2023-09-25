@@ -17,21 +17,23 @@ UCLASS()
 class TEAMPROJECT_API ATPPlayerState : public APlayerState
 {
 	GENERATED_BODY()
-private:
-
 public:
 	ATPPlayerState();
 
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentHP)
+protected:
+	virtual void Tick(float DeltaSeconds) override;
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_CurrentHP, meta = (AllowPrivateAccess = "true"))
 	float CurrentHP;
 
-	UPROPERTY(ReplicatedUsing = OnRep_MaxHP)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxHP, meta = (AllowPrivateAccess = "true"))
 	float MaxHP;
 
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentOX)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_CurrentOX, meta = (AllowPrivateAccess = "true"))
 	float CurrentOX;
 
-	UPROPERTY(ReplicatedUsing = OnRep_MaxOX)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxOX, meta = (AllowPrivateAccess = "true"))
 	float MaxOX;
 
 	UPROPERTY(ReplicatedUsing = OnRep_UserName)

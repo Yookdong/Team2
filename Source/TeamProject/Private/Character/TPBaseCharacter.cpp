@@ -15,6 +15,7 @@
 #include "PaperSpriteComponent.h"
 #include "GameMode/TPPlayerState.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATPBaseCharacter::ATPBaseCharacter()
@@ -96,6 +97,23 @@ void ATPBaseCharacter::BeginPlay()
 		if (CharacterData != nullptr)
 			SetCharacter();
 	}
+
+	BindPlayerState();
+}
+
+float ATPBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (EventInstigator != nullptr)
+	{
+		ATPPlayerState* playerstate = Cast<ATPPlayerState>(GetPlayerState());
+		if (IsValid(playerstate))
+		{
+			playerstate->AddDamage(DamageAmount);
+			return DamageAmount;
+		}
+	}
+
+	return 0;
 }
 
 void ATPBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -130,27 +148,29 @@ void ATPBaseCharacter::BindPlayerState()
 	GetWorldTimerManager().SetTimer(TH_BindPlayerState, this, &ATPBaseCharacter::BindPlayerState, 0.1f, false);
 }
 
-void ATPBaseCharacter::Die()
-{
-}
-
-void ATPBaseCharacter::ChargeOX(float charge)
+void ATPBaseCharacter::ChargeOX(float value)
 {
 	ATPPlayerState* playerstate = Cast<ATPPlayerState>(GetPlayerState());
 
 	if (IsValid(playerstate))
 	{
-		playerstate->ChargeOX(charge);
+		playerstate->ChargeOX(value);
 	}
 }
 
-void ATPBaseCharacter::AddDamage()
+void ATPBaseCharacter::MinusHP()
+{
+	UE_LOG(LogTemp, Display, TEXT("Add Dam"));
+	UGameplayStatics::ApplyDamage(this, 1.0f, GetController(), this, UDamageType::StaticClass());
+}
+
+void ATPBaseCharacter::Heal(float value)
 {
 	ATPPlayerState* playerstate = Cast<ATPPlayerState>(GetPlayerState());
 
 	if (IsValid(playerstate))
 	{
-
+		playerstate->Heal(value);
 	}
 }
 
@@ -202,13 +222,14 @@ void ATPBaseCharacter::SetCharacter()
 	FirstMesh->SetMaterial(0, CharacterData->ArmMaterial);
 }
 
+// ¿¬°á
 void ATPBaseCharacter::EventUpdateHP_Implementation(float curhp, float maxhp)
 {
 	if (curhp <= 0)
 	{
 		if (HasAuthority())
 		{
-			Die();
+			ReqDie();
 		}
 	}
 }
@@ -219,13 +240,26 @@ void ATPBaseCharacter::EventUpdateOX_Implementation(float curox, float maxox)
 	{
 		if (HasAuthority())
 		{
-			GetWorldTimerManager().SetTimer(TH_OXZero, this, &ATPBaseCharacter::AddDamage, 3.0f, false);
+			MinusHP(); 
+			GetWorldTimerManager().SetTimer(TH_OXZero, this, &ATPBaseCharacter::MinusHP, 1.0f, false);
 		}
 	}
 }
 
+// Client to Server
+void ATPBaseCharacter::ReqDie_Implementation()
+{
+	ResDie();
+}
+
+// Server to Client
 void ATPBaseCharacter::OnRep_EquipItem()
 {
+}
+
+void ATPBaseCharacter::ResDie_Implementation()
+{
+	GetMesh()->SetSimulatePhysics(true);
 }
 
 //================= Input ==============================

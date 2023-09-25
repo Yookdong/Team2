@@ -6,6 +6,8 @@
 
 ATPGameModeBase::ATPGameModeBase()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
 	ClearMission = 0;
 	MaxMission = 0;
 	CurrentCharNum = 0;

@@ -21,6 +21,15 @@ private:
 	TObjectPtr<class UPlayerInfoWidget> PlayerInfoWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	TObjectPtr<class UGameStartWidget> GameStartWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	TObjectPtr<class UGameClearWidget> GameClearWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	TObjectPtr<class UGameOverWidget> GameOverWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	class UTextBlock* TimerText;
 
 public:
@@ -28,9 +37,13 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	// Widget On//Off
 	void OpenInven();
 	void CloseInven();
+	void OpenGameClear();
+	void OpenGameOver();
 
+	// About Bind
 	void UpdateHP(float current, float max);
 	void UpdateOX(float current, float max);
 	void UpdateTimer(float time);
