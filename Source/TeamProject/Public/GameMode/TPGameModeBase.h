@@ -25,6 +25,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int CurrentCharNum;
 
+	bool bIsStart;
+
 public:
 	ATPGameModeBase();
 
@@ -39,14 +41,28 @@ protected:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	void BindFunction(class UGameStartWidget* widget);
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void AddCharNum() { CurrentCharNum++; }
 
-	// Function
-	void PassedTime(float time);
-
 	// Network
 	UFUNCTION()
 	void OnRep_Timer();
+
+	// Client to Server
+	UFUNCTION(Server, Reliable)
+	void Req_StartTimer();
+
+	UFUNCTION(Server, Reliable)
+	void Req_PassedTime(float time);
+
+
+	// Server to Client
+	UFUNCTION(NetMulticast, Reliable)
+	void Res_StartTimer();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Res_PassedTime(float time);
 };

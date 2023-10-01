@@ -23,9 +23,11 @@ private:
 	FTimerHandle TH_BindPlayerState;
 
 public:
+	ATPGameHUD();
+
 	virtual void BeginPlay() override;
 
-	void BindPlayerState();
+	void BindFunction();
 
 	void OpenInven();
 	void CloseInven();
@@ -46,6 +48,17 @@ public:
 
 	void OnUpdateGameTime_Implementation(float timer);
 
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void StartGame();
+
+	void StartGame_Implementation();
+
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void StartTimer();
+
+	void StartTimer_Implementation();
 
 	// TimerHandle
 	FTimerHandle th_BindMyPlayerState;

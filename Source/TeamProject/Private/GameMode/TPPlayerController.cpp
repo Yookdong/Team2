@@ -24,13 +24,9 @@ void ATPPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Display, TEXT("controll BeginPlay"));
-
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(this->GetLocalPlayer());
 	if (Subsystem && DefaultMappingContext)
 	{
-		UE_LOG(LogTemp, Display, TEXT("BeginPlay Input Binding"));
-
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
 }
@@ -38,8 +34,6 @@ void ATPPlayerController::BeginPlay()
 void ATPPlayerController::OnPossess(APawn* aPawn)
 {
 	Super::OnPossess(aPawn);
-
-	UE_LOG(LogTemp, Display, TEXT("OnPossess"));
 
 	if (aPawn != nullptr)
 	{
@@ -85,15 +79,11 @@ void ATPPlayerController::SetupInactiveStateInputComponent(UInputComponent* InCo
 {
 	Super::SetupInactiveStateInputComponent(InComponent);
 
-	UE_LOG(LogTemp, Display, TEXT("Controller Input Binding"));
-
 	// Set up action bindings
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InComponent);
 
 	if (EnhancedInputComponent)
 	{
-		UE_LOG(LogTemp, Display, TEXT("cast success"));
-
 		//Trigger
 		EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Started, this, &ATPPlayerController::Trigger);
 

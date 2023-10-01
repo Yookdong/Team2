@@ -21,7 +21,7 @@ private:
 	TObjectPtr<class UPlayerInfoWidget> PlayerInfoWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	TObjectPtr<class UGameStartWidget> GameStartWidget;
+	class UGameStartWidget* GameStartWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	TObjectPtr<class UGameClearWidget> GameClearWidget;
@@ -37,6 +37,9 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	// Getter
+	class UGameStartWidget* GetStartWidget() { return GameStartWidget; }
+
 	// Widget On//Off
 	void OpenInven();
 	void CloseInven();
@@ -46,5 +49,12 @@ public:
 	// About Bind
 	void UpdateHP(float current, float max);
 	void UpdateOX(float current, float max);
-	void UpdateTimer(float time);
+
+	// Client to Server
+	UFUNCTION(Server, Reliable)
+	void Req_UpdateTimer(float time);
+
+	// Server to Client
+	UFUNCTION(NetMulticast, Reliable)
+	void Res_UpdateTimer(float time);
 };

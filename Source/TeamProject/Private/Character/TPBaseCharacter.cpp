@@ -86,8 +86,6 @@ void ATPBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UE_LOG(LogTemp, Display, TEXT("Char BeginPlay"));
-
 	UTPGameInstance* gameinst = Cast<UTPGameInstance>(GetGameInstance());
 
 	if (gameinst != nullptr)
@@ -160,7 +158,6 @@ void ATPBaseCharacter::ChargeOX(float value)
 
 void ATPBaseCharacter::MinusHP()
 {
-	UE_LOG(LogTemp, Display, TEXT("Add Dam"));
 	UGameplayStatics::ApplyDamage(this, 1.0f, GetController(), this, UDamageType::StaticClass());
 }
 
@@ -176,8 +173,6 @@ void ATPBaseCharacter::Heal(float value)
 
 void ATPBaseCharacter::SetThirdView()
 {
-	UE_LOG(LogTemp, Display, TEXT("SetThirdView"));
-
 	FirstMesh->SetVisibility(false);
 
 	GetMesh()->SetOwnerNoSee(false);
@@ -195,8 +190,6 @@ void ATPBaseCharacter::SetThirdView()
 
 void ATPBaseCharacter::SetFirstView()
 {
-	UE_LOG(LogTemp, Display, TEXT("SetFirstView"));
-
 	FirstMesh->SetVisibility(true);
 
 	// 1ÀÎÄª Ä· ¹× ¸Þ½Ã

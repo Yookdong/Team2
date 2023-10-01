@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "GameStartWidget.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDele_IsStart);
 /**
  * 
  */
@@ -26,4 +27,12 @@ public:
 	UFUNCTION()
 	void GameStart();
 
+	UPROPERTY(ReplicatedUsing = OnRep_bIsStart)
+	bool bIsStart;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	FDele_IsStart Fuc_Dele_IsStart;
+
+	UFUNCTION()
+	void OnRep_bIsStart();
 };

@@ -13,13 +13,18 @@ ATPPlayerState::ATPPlayerState()
 	CurrentHP = MaxHP;
 	MaxOX = 10;
 	CurrentOX = MaxOX;
+
+	bIsStart = false;
 }
 
 void ATPPlayerState::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	UseOX(DeltaSeconds);
+	if (bIsStart)
+	{
+		UseOX(DeltaSeconds);
+	}
 }
 
 void ATPPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -95,4 +100,14 @@ void ATPPlayerState::OnRep_UserName()
 {
 	if (Func_Dele_UpdateUserName.IsBound())
 		Func_Dele_UpdateUserName.Broadcast(UserName);
+}
+
+void ATPPlayerState::Req_SetIsStart_Implementation()
+{
+	Res_SetIsStart();
+}
+
+void ATPPlayerState::Res_SetIsStart_Implementation()
+{
+	bIsStart = !bIsStart;
 }

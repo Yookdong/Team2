@@ -17,6 +17,10 @@ UCLASS()
 class TEAMPROJECT_API ATPPlayerState : public APlayerState
 {
 	GENERATED_BODY()
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	bool bIsStart;
+	
 public:
 	ATPPlayerState();
 
@@ -24,16 +28,16 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_CurrentHP, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_CurrentHP)
 	float CurrentHP;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxHP, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxHP)
 	float MaxHP;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_CurrentOX, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_CurrentOX)
 	float CurrentOX;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxOX, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_MaxOX)
 	float MaxOX;
 
 	UPROPERTY(ReplicatedUsing = OnRep_UserName)
@@ -83,6 +87,14 @@ public:
 
 	UFUNCTION()
 	void OnRep_UserName();
+
+	// Server to Client
+	UFUNCTION(Server, Reliable)
+	void Req_SetIsStart();
+
+	// Client to Server
+	UFUNCTION(NetMulticast, Reliable)
+	void Res_SetIsStart();
 
 	// TimerHandle
 	FTimerHandle TH_UpdateBind;

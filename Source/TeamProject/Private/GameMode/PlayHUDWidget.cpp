@@ -81,8 +81,16 @@ void UPlayHUDWidget::UpdateOX(float current, float max)
 	PlayerInfoWidget->SetOX(current, max);
 }
 
-void UPlayHUDWidget::UpdateTimer(float time)
+// Client to Server
+void UPlayHUDWidget::Req_UpdateTimer_Implementation(float time)
 {
+	Res_UpdateTimer(time);
+}
+
+// Server to Client
+void UPlayHUDWidget::Res_UpdateTimer_Implementation(float time)
+{
+	UE_LOG(LogTemp, Display, TEXT("UpdateTimer"));
 	int minute = 0;
 	int second = 0;
 

@@ -11,7 +11,10 @@ ATPGameModeBase::ATPGameModeBase()
 	ClearMission = 0;
 	MaxMission = 0;
 	CurrentCharNum = 0;
-	Timer = 1200.0f;
+	//Timer = 1200.0f;
+	bIsStart = false;
+
+	UE_LOG(LogTemp, Display, TEXT("GameMode Constructor"));
 }
 
 void ATPGameModeBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -24,29 +27,56 @@ void ATPGameModeBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void ATPGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Timer = 1200.0f;
 }
 
 void ATPGameModeBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	PassedTime(DeltaSeconds);
-
-	if (ClearMission >= MaxMission)
+	if (bIsStart)
 	{
-		// GameClear
+		Req_PassedTime(DeltaSeconds);
 	}
 }
 
-void ATPGameModeBase::PassedTime(float time)
+void ATPGameModeBase::BindFunction(UGameStartWidget* widget)
 {
-	Timer -= time;
-
-	OnRep_Timer();
 }
+
 
 void ATPGameModeBase::OnRep_Timer()
 {
+	UE_LOG(LogTemp, Display, TEXT("OnRep_Timer"));
 	if (Fuc_Dele_UpdateTimer.IsBound())
 		Fuc_Dele_UpdateTimer.Broadcast(Timer);
+}
+
+// Client to Server
+void ATPGameModeBase::Req_StartTimer_Implementation()
+{
+	UE_LOG(LogTemp, Display, TEXT("Req_StartTimer"));
+	Res_StartTimer();
+}
+
+void ATPGameModeBase::Req_PassedTime_Implementation(float time)
+{
+	UE_LOG(LogTemp, Display, TEXT("Req_PassedTime"));
+	Res_PassedTime(time);
+}
+
+// Server to Client
+void ATPGameModeBase::Res_StartTimer_Implementation()
+{
+	UE_LOG(LogTemp, Display, TEXT("Res_StartTimer"));
+	bIsStart = !bIsStart;
+}
+
+void ATPGameModeBase::Res_PassedTime_Implementation(float time)
+{
+	UE_LOG(LogTemp, Display, TEXT("Res_PassedTime"));
+	Timer -= time;
+
+	OnRep_Timer();
 }
