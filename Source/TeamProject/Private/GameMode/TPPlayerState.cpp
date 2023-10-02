@@ -9,9 +9,9 @@ ATPPlayerState::ATPPlayerState()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	MaxHP = 10;
+	MaxHP = 100;
 	CurrentHP = MaxHP;
-	MaxOX = 10;
+	MaxOX = 100;
 	CurrentOX = MaxOX;
 
 	bIsStart = false;
