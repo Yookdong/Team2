@@ -19,12 +19,10 @@ void UPlayerInfoWidget::NativeConstruct()
 
 void UPlayerInfoWidget::SetHP(float current, float max)
 {
-	float percent = current / max;
-	HPProgressBar->SetPercent(percent);
+	PerHP = current / max;
 }
 
 void UPlayerInfoWidget::SetOX(float current, float max)
 {
-	float percent = current / max;
-	OXProgressBar->SetPercent(percent);
+	PerOX = current / max;
 }

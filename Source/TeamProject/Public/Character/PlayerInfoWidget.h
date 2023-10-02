@@ -23,6 +23,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	class UProgressBar* OXProgressBar;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float PerHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float PerOX;
+
 public:
 	UPlayerInfoWidget(const FObjectInitializer& ObjectInitializer);
 
