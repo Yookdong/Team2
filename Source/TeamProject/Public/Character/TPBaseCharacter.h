@@ -71,7 +71,7 @@ public:
 
 
 	// Setter
-	void SetThirdView();
+	//void SetThirdView();
 	void SetFirstView();
 	void SetCharacter();
 
@@ -117,8 +117,8 @@ private:
 	class UInputAction* LookAction;
 
 	/** PressI Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* ViewChangeAction;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//class UInputAction* ViewChangeAction;
 
 protected:
 	// Called to bind functionality to input
@@ -131,6 +131,6 @@ protected:
 	void Look(const FInputActionValue& value);
 
 	/** Called for ViewChange input */
-	void ViewChange(const FInputActionValue& value);
+	//void ViewChange(const FInputActionValue& value);
 
 };

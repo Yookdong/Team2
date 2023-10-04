@@ -17,6 +17,8 @@ void UPlayHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	ClearMissionNum = 0;
+
 	InvenWidget->SetVisibility(ESlateVisibility::Collapsed);
 	GameClearWidget->SetVisibility(ESlateVisibility::Collapsed);
 	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
@@ -79,6 +81,11 @@ void UPlayHUDWidget::UpdateHP(float current, float max)
 void UPlayHUDWidget::UpdateOX(float current, float max)
 {
 	PlayerInfoWidget->SetOX(current, max);
+}
+
+void UPlayHUDWidget::UpdateClearMissionNum(float clearnum)
+{
+	ClearMissionNum = clearnum;
 }
 
 // Client to Server

@@ -8,6 +8,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateTimer, float, Timer);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateClearMissionNum, float, ClearMissionNum);
 /**
  * 
  */
@@ -16,9 +17,6 @@ class TEAMPROJECT_API ATPGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int ClearMission;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int MaxMission;
 
@@ -30,11 +28,17 @@ private:
 public:
 	ATPGameModeBase();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_Timer, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_Timer)
 	float Timer;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 	FDele_UpdateTimer Fuc_Dele_UpdateTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, ReplicatedUsing = OnRep_ClearMission)
+	int ClearMissionNum;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	FDele_UpdateClearMissionNum Fuc_Dele_UpdateClearMissionNum;
 
 protected:
 	virtual void BeginPlay() override;
@@ -51,6 +55,9 @@ public:
 	UFUNCTION()
 	void OnRep_Timer();
 
+	UFUNCTION()
+	void OnRep_ClearMission();
+
 	// Client to Server
 	UFUNCTION(Server, Reliable)
 	void Req_StartTimer();
@@ -58,6 +65,8 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Req_PassedTime(float time);
 
+	UFUNCTION(Server, Reliable)
+	void Req_UpdateClearMissionNum();
 
 	// Server to Client
 	UFUNCTION(NetMulticast, Reliable)
@@ -65,4 +74,7 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void Res_PassedTime(float time);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ReS_UpdateClearMissionNum();
 };

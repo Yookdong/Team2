@@ -78,7 +78,14 @@ ATPBaseCharacter::ATPBaseCharacter()
 	MiniMapCapture->ProjectionType = ECameraProjectionMode::Orthographic; // 미니맵 평면인가 3D인가 조절
 	MiniMapCapture->OrthoWidth = 2000.0f; // 미니맵 시야 각 조절
 
-	SetThirdView();
+	SetFirstView();
+}
+
+void ATPBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPBaseCharacter, EquipItem);
 }
 
 // Called when the game starts or when spawned
@@ -112,13 +119,6 @@ float ATPBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	}
 
 	return 0;
-}
-
-void ATPBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ATPBaseCharacter, EquipItem);
 }
 
 // Called every frame
@@ -171,22 +171,22 @@ void ATPBaseCharacter::Heal(float value)
 	}
 }
 
-void ATPBaseCharacter::SetThirdView()
-{
-	FirstMesh->SetVisibility(false);
-
-	GetMesh()->SetOwnerNoSee(false);
-
-	bUseControllerRotationYaw = false;
-
-	CameraBoom->TargetArmLength = 350.0f;
-	CameraBoom->SocketOffset = FVector(0, 50.0f, 50.0f);
-
-	FirstMesh->SetOnlyOwnerSee(false);
-	FolloCamera->bUsePawnControlRotation = false;
-
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-}
+//void ATPBaseCharacter::SetThirdView()
+//{
+//	FirstMesh->SetVisibility(false);
+//
+//	GetMesh()->SetOwnerNoSee(false);
+//
+//	bUseControllerRotationYaw = false;
+//
+//	CameraBoom->TargetArmLength = 350.0f;
+//	CameraBoom->SocketOffset = FVector(0, 50.0f, 50.0f);
+//
+//	FirstMesh->SetOnlyOwnerSee(false);
+//	FolloCamera->bUsePawnControlRotation = false;
+//
+//	GetCharacterMovement()->bOrientRotationToMovement = true;
+//}
 
 void ATPBaseCharacter::SetFirstView()
 {
@@ -282,7 +282,7 @@ void ATPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATPBaseCharacter::Look);
 
 		//ViewChange
-		EnhancedInputComponent->BindAction(ViewChangeAction, ETriggerEvent::Started, this, &ATPBaseCharacter::ViewChange);
+		//EnhancedInputComponent->BindAction(ViewChangeAction, ETriggerEvent::Started, this, &ATPBaseCharacter::ViewChange);
 	}
 
 }
@@ -316,26 +316,26 @@ void ATPBaseCharacter::Look(const FInputActionValue& value)
 	}
 }
 
-void ATPBaseCharacter::ViewChange(const FInputActionValue& value)
-{
-	if (Controller != nullptr)
-	{
-		ATPPlayerController* ps = Cast<ATPPlayerController>(Controller);
-		
-		if (IsValid(ps))
-		{
-			if (ps->bGetThirdView())
-			{
-				GetController()->SetControlRotation(GetActorRotation());
-				SetFirstView();
-				ps->bSetThirdView(false);
-			}
-			else
-			{
-				GetController()->SetControlRotation(CameraBoom->GetDesiredRotation());
-				SetThirdView();
-				ps->bSetThirdView(true);
-			}
-		}
-	}
-}
+//void ATPBaseCharacter::ViewChange(const FInputActionValue& value)
+//{
+//	if (Controller != nullptr)
+//	{
+//		ATPPlayerController* ps = Cast<ATPPlayerController>(Controller);
+//		
+//		if (IsValid(ps))
+//		{
+//			if (ps->bGetThirdView())
+//			{
+//				GetController()->SetControlRotation(GetActorRotation());
+//				SetFirstView();
+//				ps->bSetThirdView(false);
+//			}
+//			else
+//			{
+//				GetController()->SetControlRotation(CameraBoom->GetDesiredRotation());
+//				SetThirdView();
+//				ps->bSetThirdView(true);
+//			}
+//		}
+//	}
+//}

@@ -32,6 +32,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	class UTextBlock* TimerText;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float ClearMissionNum;
+	
 public:
 	UPlayHUDWidget(const FObjectInitializer& ObjectInitializer);
 
@@ -49,6 +52,7 @@ public:
 	// About Bind
 	void UpdateHP(float current, float max);
 	void UpdateOX(float current, float max);
+	void UpdateClearMissionNum(float clearnum);
 
 	// Client to Server
 	UFUNCTION(Server, Reliable)

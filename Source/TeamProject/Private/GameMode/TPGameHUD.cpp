@@ -96,6 +96,7 @@ void ATPGameHUD::CloseInven()
 
 void ATPGameHUD::OnUpdateMyHP_Implementation(float curhp, float maxhp)
 {
+	UE_LOG(LogTemp, Display, TEXT("UpdateHP IN HUD"));
 	PlayHUDWidget->UpdateHP(curhp, maxhp);
 }
 
