@@ -15,14 +15,22 @@ FST_Item* UTPGameInstance::GetItemRowData(FName name)
 FST_Character* UTPGameInstance::GetCharacterRowData()
 {
 	if (CharacterData != nullptr)
+	{
 		return CharacterData->FindRow<FST_Character>(SetCharacterRowName(), TEXT(""));
+	}
 
 	return nullptr;
 }
 
-void UTPGameInstance::SetUserName(FString name)
+bool UTPGameInstance::SetUserName(FString name)
 {
+	if (name != FString() && name.Len() < 10)
+	{
+		UserName = name;
+		return true;
+	}
 
+	return false;
 }
 
 FName UTPGameInstance::SetCharacterRowName()

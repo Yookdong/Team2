@@ -21,5 +21,14 @@ private:
 	UUserWidget* LobbyHudWidget;
 
 public:
+	ALobbyHUD();
+
 	virtual void BeginPlay() override;
+
+	void BindMyPlayerState(class ATPLobbyPlayerState* lobbyps);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateUserName(const FString& name);
+
+	void OnUpdateUserName_Implementation(const FString& name);
 };

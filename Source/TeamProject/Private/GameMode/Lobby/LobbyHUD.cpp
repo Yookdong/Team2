@@ -3,6 +3,11 @@
 
 #include "GameMode/Lobby/LobbyHUD.h"
 #include "Blueprint/UserWidget.h"
+#include "TPLobbyPlayerState.h"
+
+ALobbyHUD::ALobbyHUD()
+{
+}
 
 void ALobbyHUD::BeginPlay()
 {
@@ -19,4 +24,17 @@ void ALobbyHUD::BeginPlay()
 		player0->SetInputMode(FInputModeUIOnly());
 		player0->bShowMouseCursor = true;
 	}
+}
+
+void ALobbyHUD::BindMyPlayerState(ATPLobbyPlayerState* lobbyps)
+{
+	if (IsValid(lobbyps))
+	{
+		lobbyps->Func_Dele_UpdateUserName.AddDynamic(this, &ALobbyHUD::OnUpdateUserName);
+		OnUpdateUserName(lobbyps->GetUserName());
+	}
+}
+
+void ALobbyHUD::OnUpdateUserName_Implementation(const FString& name)
+{
 }
