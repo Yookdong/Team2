@@ -44,7 +44,7 @@ public:
 	FString GetUserName() { return UserName; }
 
 	UFUNCTION(BlueprintCallable)
-	void SetUserName(FString name);
+	bool SetUserName(FString name);
 
 	// SelectCharType
 	ECHARTYPE GetSelectCharType() { return SelectCharType; }
