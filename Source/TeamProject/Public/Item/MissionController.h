@@ -25,6 +25,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UFUNCTION(BlueprintCallable)
+	void OpenDoor() { bIsClear = true; }
 
 	// Client to Server
 	UFUNCTION(Server, Reliable)
