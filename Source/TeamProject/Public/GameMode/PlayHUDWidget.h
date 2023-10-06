@@ -30,14 +30,15 @@ private:
 	TObjectPtr<class UGameOverWidget> GameOverWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	TObjectPtr<class UPauseWidget> MenuWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	class UTextBlock* TimerText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float ClearMissionNum;
 	
 public:
-	UPlayHUDWidget(const FObjectInitializer& ObjectInitializer);
-
 	virtual void NativeConstruct() override;
 
 	// Getter
@@ -48,6 +49,7 @@ public:
 	void CloseInven();
 	void OpenGameClear();
 	void OpenGameOver();
+	void OpenMenu();
 
 	// About Bind
 	void UpdateHP(float current, float max);

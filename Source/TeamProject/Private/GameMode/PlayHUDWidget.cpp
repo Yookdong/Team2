@@ -7,11 +7,8 @@
 #include "Components/TextBlock.h"
 #include "GameOverWidget.h"
 #include "GameClearWidget.h"
+#include "PauseWidget.h"
 
-
-UPlayHUDWidget::UPlayHUDWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
-{
-}
 
 void UPlayHUDWidget::NativeConstruct()
 {
@@ -22,6 +19,7 @@ void UPlayHUDWidget::NativeConstruct()
 	InvenWidget->SetVisibility(ESlateVisibility::Collapsed);
 	GameClearWidget->SetVisibility(ESlateVisibility::Collapsed);
 	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
+	MenuWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UPlayHUDWidget::OpenInven()
@@ -64,6 +62,18 @@ void UPlayHUDWidget::OpenGameClear()
 void UPlayHUDWidget::OpenGameOver()
 {
 	GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+
+	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
+	if (IsValid(player0))
+	{
+		player0->SetInputMode(FInputModeUIOnly());
+		player0->bShowMouseCursor = true;
+	}
+}
+
+void UPlayHUDWidget::OpenMenu()
+{
+	MenuWidget->SetVisibility(ESlateVisibility::Visible);
 
 	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
 	if (IsValid(player0))
