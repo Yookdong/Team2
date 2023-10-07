@@ -2,6 +2,7 @@
 
 
 #include "Item/MissionController.h"
+#include "TPGameModeBase.h"
 
 // Sets default values
 AMissionController::AMissionController()
@@ -33,5 +34,10 @@ void AMissionController::Tick(float DeltaTime)
 void AMissionController::ReqAddScore_Implementation()
 {
 	// 게임 모드에 있는 변수 올리는 코드 짜면 됨
-	
+	ATPGameModeBase* GameMode = Cast<ATPGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	if (GameMode)
+	{
+		GameMode -> ClearMissionNum += 1;
+	}
 }
