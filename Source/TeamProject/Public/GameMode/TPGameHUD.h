@@ -62,4 +62,6 @@ public:
 
 	// TimerHandle
 	FTimerHandle th_BindMyPlayerState;
+
+	void UpdateTimerBlock(float timer);
 };

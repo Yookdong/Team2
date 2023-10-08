@@ -20,6 +20,13 @@ void UPlayHUDWidget::NativeConstruct()
 	GameClearWidget->SetVisibility(ESlateVisibility::Collapsed);
 	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
 	MenuWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
+	if (IsValid(player0))
+	{
+		player0->SetInputMode(FInputModeGameAndUI());
+		player0->bShowMouseCursor = true;
+	}
 }
 
 void UPlayHUDWidget::OpenInven()
@@ -98,16 +105,29 @@ void UPlayHUDWidget::UpdateClearMissionNum(float clearnum)
 	ClearMissionNum = clearnum;
 }
 
-// Client to Server
-void UPlayHUDWidget::Req_UpdateTimer_Implementation(float time)
+void UPlayHUDWidget::UpdateTimer(float time)
 {
-	Res_UpdateTimer(time);
+	UE_LOG(LogTemp, Display, TEXT("WIdget UpdateTimer"));
+	int minute = 0;
+	int second = 0;
+
+	minute = time / 60.0f;
+	second = (int)(time) % 60;
+
+	FString timer = FString::Printf(TEXT("%d : %d"), minute, second);
+	TimerText->SetText(FText::FromString(timer));
+}
+
+// Client to Server
+void UPlayHUDWidget::ReqUpdateTimer_Implementation(float time)
+{
+	ResUpdateTimer(time);
 }
 
 // Server to Client
-void UPlayHUDWidget::Res_UpdateTimer_Implementation(float time)
+void UPlayHUDWidget::ResUpdateTimer_Implementation(float time)
 {
-	UE_LOG(LogTemp, Display, TEXT("UpdateTimer"));
+	UE_LOG(LogTemp, Display, TEXT("WIdget UpdateTimer"));
 	int minute = 0;
 	int second = 0;
 

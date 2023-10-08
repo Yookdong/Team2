@@ -56,11 +56,13 @@ public:
 	void UpdateOX(float current, float max);
 	void UpdateClearMissionNum(float clearnum);
 
+	void UpdateTimer(float time);
+
 	// Client to Server
 	UFUNCTION(Server, Reliable)
-	void Req_UpdateTimer(float time);
+	void ReqUpdateTimer(float time);
 
 	// Server to Client
 	UFUNCTION(NetMulticast, Reliable)
-	void Res_UpdateTimer(float time);
+	void ResUpdateTimer(float time);
 };

@@ -8,6 +8,8 @@
 #include "TPBaseCharacter.h"
 #include "InventoryComponent.h"
 #include "TPGameHUD.h"
+#include "Kismet/GameplayStatics.h"
+#include "TPGameModeBase.h"
 //#include "Net/UnrealNetwork.h"
 
 
@@ -28,6 +30,15 @@ void ATPPlayerController::BeginPlay()
 	if (Subsystem && DefaultMappingContext)
 	{
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
+	}
+
+	ATPGameModeBase* gamemode = Cast<ATPGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	if (IsValid(gamemode))
+	{
+		UE_LOG(LogTemp, Display, TEXT("GameMode BindFuction in Controller"));
+
+		gamemode->BindFunction();
 	}
 }
 
@@ -73,6 +84,16 @@ void ATPPlayerController::ResPressF_Implementation()
 {
 }
 
+void ATPPlayerController::UpdateTimer(float time)
+{
+	UE_LOG(LogTemp, Display, TEXT("ControllerUpdateTimer"));
+	ATPGameHUD* hud = Cast<ATPGameHUD>(GetHUD());
+	
+	if (hud == nullptr)
+	{
+		hud->UpdateTimerBlock(time);
+	}
+}
 
 // Input Function
 void ATPPlayerController::SetupInactiveStateInputComponent(UInputComponent* InComponent)

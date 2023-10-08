@@ -55,6 +55,9 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void ResPressF();
 
+	//UFUNCTION(NetMulticast, Reliable)
+	void UpdateTimer(float time);
+
 
 public:
 	//========= Input =====================

@@ -36,12 +36,16 @@ void ATPGameHUD::BeginPlay()
 
 void ATPGameHUD::BindFunction()
 {
+	int clear = 0;
+
 	UE_LOG(LogTemp, Display, TEXT("TPGameHUD BindFuction"));
 
 	APlayerController* controller = GetWorld()->GetFirstPlayerController();
 
 	if (IsValid(controller))
 	{
+		UE_LOG(LogTemp, Display, TEXT("PlayerState BindFuction"));
+
 		ATPPlayerState* tpstate = Cast<ATPPlayerState>(controller->PlayerState);
 
 		if (IsValid(tpstate))
@@ -51,6 +55,8 @@ void ATPGameHUD::BindFunction()
 
 			tpstate->Fuc_Dele_UpdateOX.AddDynamic(this, &ATPGameHUD::OnUpdateMyOX);
 			OnUpdateMyOX(tpstate->CurrentOX, tpstate->MaxOX);
+
+			clear++;
 		}
 	}
 
@@ -58,6 +64,8 @@ void ATPGameHUD::BindFunction()
 	
 	if (IsValid(gamemode))
 	{
+		UE_LOG(LogTemp, Display, TEXT("GameMode BindFuction"));
+
 		gamemode->Fuc_Dele_UpdateTimer.AddDynamic(this, &ATPGameHUD::OnUpdateGameTime);
 		OnUpdateGameTime(gamemode->Timer);
 	}
@@ -68,10 +76,17 @@ void ATPGameHUD::BindFunction()
 		startsidget->Fuc_Dele_IsStart.AddDynamic(this, &ATPGameHUD::StartGame);
 		startsidget->Fuc_Dele_IsStart.AddDynamic(this, &ATPGameHUD::StartTimer);
 
-		return;
+		clear++;
 	}
 
-	GetWorldTimerManager().SetTimer(TH_BindPlayerState, this, &ATPGameHUD::BindFunction, 0.1f, false);
+	if (clear == 2)
+	{
+		return;
+	}
+	else
+	{
+		GetWorldTimerManager().SetTimer(TH_BindPlayerState, this, &ATPGameHUD::BindFunction, 0.1f, false);
+	}
 }
 
 void ATPGameHUD::OpenInven()
@@ -108,7 +123,7 @@ void ATPGameHUD::OnUpdateMyOX_Implementation(float curox, float maxox)
 void ATPGameHUD::OnUpdateGameTime_Implementation(float timer)
 {
 	UE_LOG(LogTemp, Display, TEXT("OnUpdateGameTime"));
-	PlayHUDWidget->Req_UpdateTimer(timer);
+	UpdateTimerBlock(timer);
 }
 
 void ATPGameHUD::StartGame_Implementation()
@@ -129,11 +144,17 @@ void ATPGameHUD::StartGame_Implementation()
 
 void ATPGameHUD::StartTimer_Implementation()
 {
-	UE_LOG(LogTemp, Display, TEXT("StartTimer_Implementation"));
 	ATPGameModeBase* gamemode = Cast<ATPGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	if (IsValid(gamemode))
 	{
+		UE_LOG(LogTemp, Display, TEXT("StartTimer_Implementation"));
 		gamemode->Req_StartTimer();
 	}
+}
+
+void ATPGameHUD::UpdateTimerBlock(float timer)
+{
+	UE_LOG(LogTemp, Display, TEXT("HUD UpdateTimer"));
+	PlayHUDWidget->UpdateTimer(timer);
 }

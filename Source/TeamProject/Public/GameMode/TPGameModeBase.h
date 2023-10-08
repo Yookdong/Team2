@@ -24,6 +24,7 @@ private:
 	int CurrentCharNum;
 
 	bool bIsStart;
+	bool bIsBindClear;
 
 public:
 	ATPGameModeBase();
@@ -40,14 +41,16 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 	FDele_UpdateClearMissionNum Fuc_Dele_UpdateClearMissionNum;
 
+	FTimerHandle TH_UpdateTimer;
+
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	void BindFunction(class UGameStartWidget* widget);
-
 public:
+	void BindFunction();
+
 	UFUNCTION(BlueprintCallable)
 	void AddCharNum() { CurrentCharNum++; }
 
@@ -57,6 +60,9 @@ public:
 
 	UFUNCTION()
 	void OnRep_ClearMission();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateTimer(float newtime);
 
 	// Client to Server
 	UFUNCTION(Server, Reliable)
