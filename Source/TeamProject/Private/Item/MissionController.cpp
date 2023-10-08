@@ -35,9 +35,17 @@ void AMissionController::ReqAddScore_Implementation()
 {
 	// 게임 모드에 있는 변수 올리는 코드 짜면 됨
 	ATPGameModeBase* GameMode = Cast<ATPGameModeBase>(GetWorld()->GetAuthGameMode());
+	UE_LOG(LogTemp, Warning, TEXT("ReqAddScore Call"));
 
 	if (GameMode)
 	{
 		GameMode -> ClearMissionNum += 1;
-	}
+		UE_LOG(LogTemp, Warning, TEXT("ClearMissionNum: %d"), GameMode->ClearMissionNum);
+		ResAddScore();
+	}	
+}
+
+void AMissionController::ResAddScore_Implementation()
+{
+	bIsClear = false;
 }

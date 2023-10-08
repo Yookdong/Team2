@@ -33,4 +33,6 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ReqAddScore();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void ResAddScore();
 };
