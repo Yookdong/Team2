@@ -16,6 +16,7 @@
 #include "GameMode/TPPlayerState.h"
 #include "Net/UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameMode/TPGameModeBase.h"
 
 // Sets default values
 ATPBaseCharacter::ATPBaseCharacter()
@@ -220,10 +221,7 @@ void ATPBaseCharacter::EventUpdateHP_Implementation(float curhp, float maxhp)
 {
 	if (curhp <= 0)
 	{
-		if (HasAuthority())
-		{
-			ReqDie();
-		}
+		ReqDie();
 	}
 }
 
@@ -242,6 +240,14 @@ void ATPBaseCharacter::EventUpdateOX_Implementation(float curox, float maxox)
 // Client to Server
 void ATPBaseCharacter::ReqDie_Implementation()
 {
+	ATPGameModeBase* GameMode = Cast<ATPGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	if (GameMode)
+	{
+		GameMode->AddCharNum();
+		UE_LOG(LogTemp, Warning, TEXT("AddCharNum"));
+	}
+
 	ResDie();
 }
 
@@ -252,6 +258,7 @@ void ATPBaseCharacter::OnRep_EquipItem()
 
 void ATPBaseCharacter::ResDie_Implementation()
 {
+	GetMesh()->SetCollisionProfileName("Ragdoll");
 	GetMesh()->SetSimulatePhysics(true);
 }
 

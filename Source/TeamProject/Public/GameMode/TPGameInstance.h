@@ -29,6 +29,9 @@ private:
 
 	ECHARTYPE SelectCharType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool bIsGameClear;
+
 public:
 	UTPGameInstance();
 
@@ -53,4 +56,13 @@ public:
 	void SetSelectCharType(ECHARTYPE type) { SelectCharType = type; }
 	
 	FName SetCharacterRowName();
+
+	// Client to Server
+	UFUNCTION(Server, Reliable)
+	void ReqSetIsClear();
+
+	// Server to Client
+	UFUNCTION(NetMulticast, Reliable)
+	void ResSetIsClear();
+
 };

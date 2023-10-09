@@ -32,14 +32,14 @@ void ATPPlayerController::BeginPlay()
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
 
-	ATPGameModeBase* gamemode = Cast<ATPGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	//ATPGameModeBase* gamemode = Cast<ATPGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
-	if (IsValid(gamemode))
-	{
-		UE_LOG(LogTemp, Display, TEXT("GameMode BindFuction in Controller"));
+	//if (IsValid(gamemode))
+	//{
+	//	UE_LOG(LogTemp, Display, TEXT("GameMode BindFuction in Controller"));
 
-		gamemode->BindFunction();
-	}
+	//	gamemode->BindFunction();
+	//}
 }
 
 void ATPPlayerController::OnPossess(APawn* aPawn)

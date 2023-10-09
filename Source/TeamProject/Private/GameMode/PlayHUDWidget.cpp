@@ -17,8 +17,8 @@ void UPlayHUDWidget::NativeConstruct()
 	ClearMissionNum = 0;
 
 	InvenWidget->SetVisibility(ESlateVisibility::Collapsed);
-	GameClearWidget->SetVisibility(ESlateVisibility::Collapsed);
-	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
+	//GameClearWidget->SetVisibility(ESlateVisibility::Collapsed);
+	//GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
 	MenuWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
@@ -54,29 +54,29 @@ void UPlayHUDWidget::CloseInven()
 	}
 }
 
-void UPlayHUDWidget::OpenGameClear()
-{
-	GameClearWidget->SetVisibility(ESlateVisibility::Visible);
-
-	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
-	if (IsValid(player0))
-	{
-		player0->SetInputMode(FInputModeUIOnly());
-		player0->bShowMouseCursor = true;
-	}
-}
-
-void UPlayHUDWidget::OpenGameOver()
-{
-	GameOverWidget->SetVisibility(ESlateVisibility::Visible);
-
-	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
-	if (IsValid(player0))
-	{
-		player0->SetInputMode(FInputModeUIOnly());
-		player0->bShowMouseCursor = true;
-	}
-}
+//void UPlayHUDWidget::OpenGameClear()
+//{
+//	GameClearWidget->SetVisibility(ESlateVisibility::Visible);
+//
+//	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
+//	if (IsValid(player0))
+//	{
+//		player0->SetInputMode(FInputModeUIOnly());
+//		player0->bShowMouseCursor = true;
+//	}
+//}
+//
+//void UPlayHUDWidget::OpenGameOver()
+//{
+//	GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+//
+//	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
+//	if (IsValid(player0))
+//	{
+//		player0->SetInputMode(FInputModeUIOnly());
+//		player0->bShowMouseCursor = true;
+//	}
+//}
 
 void UPlayHUDWidget::OpenMenu()
 {
@@ -87,6 +87,18 @@ void UPlayHUDWidget::OpenMenu()
 	{
 		player0->SetInputMode(FInputModeUIOnly());
 		player0->bShowMouseCursor = true;
+	}
+}
+
+void UPlayHUDWidget::CloseMenu()
+{
+	MenuWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+	APlayerController* player0 = GetWorld()->GetFirstPlayerController();
+	if (IsValid(player0))
+	{
+		player0->SetInputMode(FInputModeGameOnly());
+		player0->bShowMouseCursor = false;
 	}
 }
 

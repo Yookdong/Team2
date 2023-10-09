@@ -4,6 +4,7 @@
 #include "GameMode/TPGameModeBase.h"
 #include "Net/UnrealNetwork.h"
 #include "TPPlayerController.h"
+#include "GameMode/TPGameInstance.h"
 
 ATPGameModeBase::ATPGameModeBase()
 {
@@ -12,7 +13,8 @@ ATPGameModeBase::ATPGameModeBase()
 	ClearMissionNum = 0;
 	MaxMission = 5;
 	CurrentCharNum = 0;
-	Timer = 1200.0f;
+	MaxTimer = 1200.0f;
+	Timer = MaxTimer;
 	bIsStart = false;
 	bIsBindClear = false;
 }
@@ -29,11 +31,31 @@ void ATPGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	BindFunction();
 }
 
 void ATPGameModeBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if (Timer <= 0 || (CurrentCharNum == GetWorld()->GetNumPlayerControllers()))
+	{
+		UE_LOG(LogTemp, Display, TEXT("GameOver"));
+		GetWorld()->ServerTravel("Ending");
+	}
+
+	if (ClearMissionNum == MaxMission)
+	{
+		UE_LOG(LogTemp, Display, TEXT("GameClear"));
+
+		UTPGameInstance* gameinst = Cast<UTPGameInstance>(GetGameInstance());
+
+		if (gameinst != nullptr)
+		{
+			gameinst->ReqSetIsClear();
+			GetWorld()->ServerTravel("Ending");
+		}
+	}
 
 	if (bIsStart)
 	{
@@ -41,10 +63,11 @@ void ATPGameModeBase::Tick(float DeltaSeconds)
 		Req_PassedTime(DeltaSeconds);
 	}
 
-	//if (!bIsBindClear)
-	//{
-	//	BindFunction();
-	//}
+	if (bIsBindClear)
+	{
+		GetWorldTimerManager().ClearTimer(TH_UpdateTimer);
+		bIsBindClear = false;
+	}
 }
 
 void ATPGameModeBase::BindFunction()
@@ -69,7 +92,7 @@ void ATPGameModeBase::OnRep_ClearMission()
 
 void ATPGameModeBase::UpdateTimer(float newtime)
 {
-	int32 num = 0;
+	//int32 num = 0;
 
 	////Find All PC
 	for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; ++Iter)
@@ -80,23 +103,23 @@ void ATPGameModeBase::UpdateTimer(float newtime)
 		{
 			UE_LOG(LogTemp, Display, TEXT("CastController"));
 			PC->UpdateTimer(Timer);
-			num++;
+			//num++;
 		}
 	}
 
-	//if (HasAuthority())
-	//{
-	//	//Timer = newtime;
-		OnRep_Timer();
-	//}
-
-	if (num == GetWorld()->GetNumPlayerControllers())
+	if (HasAuthority())
 	{
-		bIsBindClear = true;
-		return;
+		//Timer = newtime;
+		OnRep_Timer();
 	}
 
-	GetWorldTimerManager().SetTimer(TH_UpdateTimer, this, &ATPGameModeBase::BindFunction, 0.1f, false);
+	//if (num == GetWorld()->GetNumPlayerControllers())
+	//{
+	//	bIsBindClear = true;
+	//	return;
+	//}
+
+	//GetWorldTimerManager().SetTimer(TH_UpdateTimer, this, &ATPGameModeBase::BindFunction, 0.1f, false);
 }
 
 // Client to Server
@@ -129,6 +152,8 @@ void ATPGameModeBase::Res_PassedTime_Implementation(float time)
 {
 	UE_LOG(LogTemp, Display, TEXT("Res_PassedTime"));
 	Timer -= time;
+
+	Timer = FMath::Clamp(Timer, 0, MaxTimer);
 
 	OnRep_Timer();
 	//UpdateTimer(Timer);

@@ -5,6 +5,7 @@
 
 UTPGameInstance::UTPGameInstance()
 {
+	bIsGameClear = false;
 }
 
 FST_Item* UTPGameInstance::GetItemRowData(FName name)
@@ -58,4 +59,14 @@ FName UTPGameInstance::SetCharacterRowName()
 	}
 
 	return name;
+}
+
+void UTPGameInstance::ReqSetIsClear_Implementation()
+{
+	ResSetIsClear();
+}
+
+void UTPGameInstance::ResSetIsClear_Implementation()
+{
+	bIsGameClear = true;
 }

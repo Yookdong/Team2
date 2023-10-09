@@ -23,11 +23,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	class UGameStartWidget* GameStartWidget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	TObjectPtr<class UGameClearWidget> GameClearWidget;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	//TObjectPtr<class UGameClearWidget> GameClearWidget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
-	TObjectPtr<class UGameOverWidget> GameOverWidget;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
+	//TObjectPtr<class UGameOverWidget> GameOverWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", BindWidget))
 	TObjectPtr<class UPauseWidget> MenuWidget;
@@ -47,9 +47,14 @@ public:
 	// Widget On//Off
 	void OpenInven();
 	void CloseInven();
-	void OpenGameClear();
-	void OpenGameOver();
+	//void OpenGameClear();
+	//void OpenGameOver();
+
+	UFUNCTION(BlueprintCallable)
 	void OpenMenu();
+	
+	UFUNCTION(BlueprintCallable)
+	void CloseMenu();
 
 	// About Bind
 	void UpdateHP(float current, float max);

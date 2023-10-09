@@ -23,6 +23,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int CurrentCharNum;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float MaxTimer;
+
 	bool bIsStart;
 	bool bIsBindClear;
 

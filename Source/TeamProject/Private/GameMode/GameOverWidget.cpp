@@ -14,7 +14,7 @@ void UGameOverWidget::NativeConstruct()
 void UGameOverWidget::GameReStart()
 {
 	APlayerController* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (pc->HasAuthority())
+	if (pc != nullptr)
 	{
 		GetWorld()->ServerTravel("Entry");
 	}
