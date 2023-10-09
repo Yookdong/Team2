@@ -25,7 +25,7 @@ protected:
 
 public:
 	UPROPERTY(ReplicatedUsing = OnRep_UserName)
-	FString UserName; // 노티피, 리플리케이트 하는 변수들 private 로 하면 접근을 할 수 없어서 오류가 난다.
+	FString UserName;
 
 	UFUNCTION(BlueprintCallable)
 	FString GetUserName() { return UserName; }

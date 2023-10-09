@@ -32,14 +32,7 @@ void ATPPlayerController::BeginPlay()
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
 
-	//ATPGameModeBase* gamemode = Cast<ATPGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-
-	//if (IsValid(gamemode))
-	//{
-	//	UE_LOG(LogTemp, Display, TEXT("GameMode BindFuction in Controller"));
-
-	//	gamemode->BindFunction();
-	//}
+	BindFunction();
 }
 
 void ATPPlayerController::OnPossess(APawn* aPawn)
@@ -50,6 +43,20 @@ void ATPPlayerController::OnPossess(APawn* aPawn)
 	{
 		ControlledPawn = Cast<ATPBaseCharacter>(GetPawn());
 	}
+}
+
+void ATPPlayerController::BindFunction()
+{
+	ATPGameModeBase* gamemode = Cast<ATPGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	if (IsValid(gamemode))
+	{
+		gamemode->Fuc_Dele_UpdateClearMissionNum.AddDynamic(this, &ATPPlayerController::UpdateMissionNum);
+		UpdateMissionNum(gamemode->ClearMissionNum);
+		return;
+	}
+
+	GetWorldTimerManager().SetTimer(TH_BindMissionNum, this, &ATPPlayerController::BindFunction, 0.1f, false);
 }
 
 bool ATPPlayerController::AddtoInven(FName name, int32 quantity)
@@ -86,12 +93,21 @@ void ATPPlayerController::ResPressF_Implementation()
 
 void ATPPlayerController::UpdateTimer(float time)
 {
-	UE_LOG(LogTemp, Display, TEXT("ControllerUpdateTimer"));
 	ATPGameHUD* hud = Cast<ATPGameHUD>(GetHUD());
 	
 	if (hud == nullptr)
 	{
 		hud->UpdateTimerBlock(time);
+	}
+}
+
+void ATPPlayerController::UpdateMissionNum_Implementation(float value)
+{
+	ATPGameHUD* hud = Cast<ATPGameHUD>(GetHUD());
+
+	if (hud == nullptr)
+	{
+		hud->UpdateMissionNumBlock(value);
 	}
 }
 

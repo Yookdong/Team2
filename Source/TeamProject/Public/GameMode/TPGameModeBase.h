@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddCharNum() { CurrentCharNum++; }
 
+	UFUNCTION(BlueprintCallable)
+	void AddClearMissionNum();
+
 	// Network
 	UFUNCTION()
 	void OnRep_Timer();

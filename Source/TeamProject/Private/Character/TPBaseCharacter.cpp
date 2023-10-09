@@ -172,23 +172,6 @@ void ATPBaseCharacter::Heal(float value)
 	}
 }
 
-//void ATPBaseCharacter::SetThirdView()
-//{
-//	FirstMesh->SetVisibility(false);
-//
-//	GetMesh()->SetOwnerNoSee(false);
-//
-//	bUseControllerRotationYaw = false;
-//
-//	CameraBoom->TargetArmLength = 350.0f;
-//	CameraBoom->SocketOffset = FVector(0, 50.0f, 50.0f);
-//
-//	FirstMesh->SetOnlyOwnerSee(false);
-//	FolloCamera->bUsePawnControlRotation = false;
-//
-//	GetCharacterMovement()->bOrientRotationToMovement = true;
-//}
-
 void ATPBaseCharacter::SetFirstView()
 {
 	FirstMesh->SetVisibility(true);
@@ -245,7 +228,6 @@ void ATPBaseCharacter::ReqDie_Implementation()
 	if (GameMode)
 	{
 		GameMode->AddCharNum();
-		UE_LOG(LogTemp, Warning, TEXT("AddCharNum"));
 	}
 
 	ResDie();
@@ -287,9 +269,6 @@ void ATPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATPBaseCharacter::Look);
-
-		//ViewChange
-		//EnhancedInputComponent->BindAction(ViewChangeAction, ETriggerEvent::Started, this, &ATPBaseCharacter::ViewChange);
 	}
 
 }

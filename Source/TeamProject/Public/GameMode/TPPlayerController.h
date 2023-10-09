@@ -32,6 +32,10 @@ protected:
 
 	virtual void OnPossess(APawn* aPawn) override;
 
+	void BindFunction();
+
+	FTimerHandle TH_BindMissionNum;
+
 public:
 	bool AddtoInven(FName name, int32 quantity);
 
@@ -58,6 +62,10 @@ public:
 	//UFUNCTION(NetMulticast, Reliable)
 	void UpdateTimer(float time);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void UpdateMissionNum(float value);
+
+	void UpdateMissionNum_Implementation(float value);
 
 public:
 	//========= Input =====================

@@ -71,3 +71,4 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void ResUpdateTimer(float time);
 };
+ 

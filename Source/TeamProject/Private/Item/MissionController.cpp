@@ -39,7 +39,7 @@ void AMissionController::ReqAddScore_Implementation()
 
 	if (GameMode)
 	{
-		GameMode -> ClearMissionNum += 1;
+		GameMode->AddClearMissionNum();
 		UE_LOG(LogTemp, Warning, TEXT("ClearMissionNum: %d"), GameMode->ClearMissionNum);
 		ResAddScore();
 	}	

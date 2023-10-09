@@ -64,4 +64,6 @@ public:
 	FTimerHandle th_BindMyPlayerState;
 
 	void UpdateTimerBlock(float timer);
+
+	void UpdateMissionNumBlock(float value);
 };

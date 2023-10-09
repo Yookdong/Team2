@@ -13,7 +13,6 @@
 
 ATPGameHUD::ATPGameHUD()
 {
-	UE_LOG(LogTemp, Display, TEXT("TPGameHUD Constructor"));
 }
 
 void ATPGameHUD::BeginPlay()
@@ -38,14 +37,10 @@ void ATPGameHUD::BindFunction()
 {
 	int clear = 0;
 
-	UE_LOG(LogTemp, Display, TEXT("TPGameHUD BindFuction"));
-
 	APlayerController* controller = GetWorld()->GetFirstPlayerController();
 
 	if (IsValid(controller))
 	{
-		UE_LOG(LogTemp, Display, TEXT("PlayerState BindFuction"));
-
 		ATPPlayerState* tpstate = Cast<ATPPlayerState>(controller->PlayerState);
 
 		if (IsValid(tpstate))
@@ -64,8 +59,6 @@ void ATPGameHUD::BindFunction()
 	
 	if (IsValid(gamemode))
 	{
-		UE_LOG(LogTemp, Display, TEXT("GameMode BindFuction"));
-
 		gamemode->Fuc_Dele_UpdateTimer.AddDynamic(this, &ATPGameHUD::OnUpdateGameTime);
 		OnUpdateGameTime(gamemode->Timer);
 	}
@@ -111,7 +104,6 @@ void ATPGameHUD::CloseInven()
 
 void ATPGameHUD::OnUpdateMyHP_Implementation(float curhp, float maxhp)
 {
-	UE_LOG(LogTemp, Display, TEXT("UpdateHP IN HUD"));
 	PlayHUDWidget->UpdateHP(curhp, maxhp);
 }
 
@@ -122,13 +114,11 @@ void ATPGameHUD::OnUpdateMyOX_Implementation(float curox, float maxox)
 
 void ATPGameHUD::OnUpdateGameTime_Implementation(float timer)
 {
-	UE_LOG(LogTemp, Display, TEXT("OnUpdateGameTime"));
 	UpdateTimerBlock(timer);
 }
 
 void ATPGameHUD::StartGame_Implementation()
 {
-	UE_LOG(LogTemp, Display, TEXT("StartGame_Implementation"));
 	APlayerController* controller = GetWorld()->GetFirstPlayerController();
 
 	if (IsValid(controller))
@@ -157,4 +147,9 @@ void ATPGameHUD::UpdateTimerBlock(float timer)
 {
 	UE_LOG(LogTemp, Display, TEXT("HUD UpdateTimer"));
 	PlayHUDWidget->UpdateTimer(timer);
+}
+
+void ATPGameHUD::UpdateMissionNumBlock(float value)
+{
+	PlayHUDWidget->UpdateClearMissionNum(value);
 }

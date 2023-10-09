@@ -59,7 +59,6 @@ void ATPGameModeBase::Tick(float DeltaSeconds)
 
 	if (bIsStart)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Start Timer Tick"));
 		Req_PassedTime(DeltaSeconds);
 	}
 
@@ -76,16 +75,21 @@ void ATPGameModeBase::BindFunction()
 }
 
 
+void ATPGameModeBase::AddClearMissionNum()
+{
+	ClearMissionNum++;
+
+	OnRep_ClearMission();
+}
+
 void ATPGameModeBase::OnRep_Timer()
 {
-	UE_LOG(LogTemp, Display, TEXT("OnRep_Timer"));
 	if (Fuc_Dele_UpdateTimer.IsBound())
 		Fuc_Dele_UpdateTimer.Broadcast(Timer);
 }
 
 void ATPGameModeBase::OnRep_ClearMission()
 {
-	UE_LOG(LogTemp, Display, TEXT("OnRep_ClearMission"));
 	if (Fuc_Dele_UpdateClearMissionNum.IsBound())
 		Fuc_Dele_UpdateClearMissionNum.Broadcast(ClearMissionNum);
 }
@@ -97,11 +101,9 @@ void ATPGameModeBase::UpdateTimer(float newtime)
 	////Find All PC
 	for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; ++Iter)
 	{
-		UE_LOG(LogTemp, Display, TEXT("for by UpdateTimer"));
 		ATPPlayerController* PC = Cast<ATPPlayerController>(*Iter);
 		if (PC)
 		{
-			UE_LOG(LogTemp, Display, TEXT("CastController"));
 			PC->UpdateTimer(Timer);
 			//num++;
 		}
@@ -125,32 +127,27 @@ void ATPGameModeBase::UpdateTimer(float newtime)
 // Client to Server
 void ATPGameModeBase::Req_StartTimer_Implementation()
 {
-	UE_LOG(LogTemp, Display, TEXT("Req_StartTimer"));
 	Res_StartTimer();
 }
 
 void ATPGameModeBase::Req_PassedTime_Implementation(float time)
 {
-	UE_LOG(LogTemp, Display, TEXT("Req_PassedTime"));
 	Res_PassedTime(time);
 }
 
 void ATPGameModeBase::Req_UpdateClearMissionNum_Implementation()
 {
-	UE_LOG(LogTemp, Display, TEXT("Req_UpdateClearMissionNum"));
 	ReS_UpdateClearMissionNum();
 }
 
 // Server to Client
 void ATPGameModeBase::Res_StartTimer_Implementation()
 {
-	UE_LOG(LogTemp, Display, TEXT("Res_StartTimer"));
 	bIsStart = !bIsStart;
 }
 
 void ATPGameModeBase::Res_PassedTime_Implementation(float time)
 {
-	UE_LOG(LogTemp, Display, TEXT("Res_PassedTime"));
 	Timer -= time;
 
 	Timer = FMath::Clamp(Timer, 0, MaxTimer);
@@ -162,5 +159,4 @@ void ATPGameModeBase::Res_PassedTime_Implementation(float time)
 void ATPGameModeBase::ReS_UpdateClearMissionNum_Implementation()
 {
 	OnRep_ClearMission();
-
 }

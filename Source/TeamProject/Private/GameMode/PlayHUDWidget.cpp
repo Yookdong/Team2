@@ -139,7 +139,6 @@ void UPlayHUDWidget::ReqUpdateTimer_Implementation(float time)
 // Server to Client
 void UPlayHUDWidget::ResUpdateTimer_Implementation(float time)
 {
-	UE_LOG(LogTemp, Display, TEXT("WIdget UpdateTimer"));
 	int minute = 0;
 	int second = 0;
 

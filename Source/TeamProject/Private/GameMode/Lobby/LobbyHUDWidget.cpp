@@ -25,7 +25,7 @@ void ULobbyHUDWidget::NativeConstruct()
 void ULobbyHUDWidget::StartGame()
 {
 	// 나중에 다른 제작 레벨로 바꿔야 됨
-	GetWorld()->ServerTravel("test");
+	GetWorld()->ServerTravel("MyMap3");
 }
 
 void ULobbyHUDWidget::CharacterSelect()
