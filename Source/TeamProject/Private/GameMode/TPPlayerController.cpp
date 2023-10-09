@@ -95,7 +95,7 @@ void ATPPlayerController::UpdateTimer(float time)
 {
 	ATPGameHUD* hud = Cast<ATPGameHUD>(GetHUD());
 	
-	if (hud == nullptr)
+	if (hud != nullptr)
 	{
 		hud->UpdateTimerBlock(time);
 	}
@@ -105,7 +105,7 @@ void ATPPlayerController::UpdateMissionNum_Implementation(float value)
 {
 	ATPGameHUD* hud = Cast<ATPGameHUD>(GetHUD());
 
-	if (hud == nullptr)
+	if (hud != nullptr)
 	{
 		hud->UpdateMissionNumBlock(value);
 	}
